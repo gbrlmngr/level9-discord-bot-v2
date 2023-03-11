@@ -6,14 +6,16 @@
   "main": "dist/main.js",
   "scripts": {
     "clean": "rimraf dist/",
-    "build": "esbuild ./src/main.ts --bundle --platform=node --target=node18.15 --outdir=dist --sourcemap --sources-content=false --minify --analyze",
+    "build": "tsc",
     "build:dev": "npm run build -- --watch",
     "start": "cross-env NODE_ENV=production dotenv -e .env.production -- node dist/main.js",
     "start:dev": "cross-env NODE_ENV=development dotenv -e .env.development -- nodemon ./dist/main.js",
     "lint": "eslint --fix src/",
     "format": "prettier --write src/",
     "test": "vitest src/",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "register-discord-commands": "dotenv -e .env.production -- node scripts/register-discord-commands.cjs",
+    "register-discord-commands:dev": "dotenv -e .env.development -- node scripts/register-discord-commands.cjs"
   },
   "keywords": [
     "level9gg",
@@ -24,6 +26,7 @@
   "devDependencies": {
     "@commitlint/cli": "^17.4.4",
     "@commitlint/config-conventional": "^17.4.4",
+    "@types/signale": "^1.4.4",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
     "cross-env": "^7.0.3",
@@ -38,11 +41,16 @@
     "vitest": "^0.29.2"
   },
   "dependencies": {
+    "discord.js": "^14.7.1",
     "dotenv-cli": "^7.0.0",
     "env-var": "^7.3.0",
-    "esbuild": "0.17.11"
+    "esbuild": "0.17.11",
+    "signale": "^1.4.0"
   },
   "engines": {
     "node": ">=18.15"
+  },
+  "signale": {
+    "displayTimestamp": true
   }
 }
