@@ -19,9 +19,7 @@ async function logIn(token: string): Promise<Client | void> {
 
     return client;
   } catch (error) {
-    signale.error(
-      `Unable to log in! Is the Discord client token still avalable?`
-    );
+    signale.error(`Unable to log in! Is the Discord client token still valid?`);
   }
 }
 
