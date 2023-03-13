@@ -5,8 +5,14 @@ export const metadata = new SlashCommandBuilder()
   .setDescription('Check if the bot is alive or not.');
 
 export const handler = async (interaction: ChatInputCommandInteraction) => {
-  await interaction.reply({
-    content: `Pong! I am pretty much alive and reacted in around ${interaction.client.ws.ping}ms.`,
-    ephemeral: true,
+  const initialReply = await interaction.reply({
+    content: 'Got the ping! Waiting for the pong...',
+    fetchReply: true,
   });
+
+  initialReply.edit(
+    `Pong! I am alive and reacted in around ${
+      initialReply.createdTimestamp - interaction.createdTimestamp
+    }ms`
+  );
 };
