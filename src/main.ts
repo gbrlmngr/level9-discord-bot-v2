@@ -3,7 +3,7 @@ import * as signale from 'signale';
 import { DISCORD_CLIENT_TOKEN } from './configuration/discord';
 
 import * as clientReadyEvent from './events/client-ready.event';
-import * as interactionCreateEvent from './events/interaction-create.event';
+import * as chatInputCommandEvent from './events/chat-input-command.event';
 
 import * as pingCommand from './commands/ping.command';
 
@@ -25,7 +25,7 @@ async function logIn(token: string): Promise<Client | void> {
 
 async function registerClientEvents(client: Client): Promise<void> {
   client.once(clientReadyEvent.name, clientReadyEvent.handler);
-  client.on(interactionCreateEvent.name, interactionCreateEvent.handler);
+  client.on(chatInputCommandEvent.name, chatInputCommandEvent.handler);
 }
 
 async function registerClientCommands(): Promise<void> {
