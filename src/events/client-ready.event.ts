@@ -1,6 +1,6 @@
 import { Client, Events, ActivityType } from 'discord.js';
 import * as signale from 'signale';
-import * as metadata from '../metadata.json';
+import * as botMetadata from '../bot-metadata.json';
 
 export const name = Events.ClientReady;
 export const handler = async (eventClient: Client) => {
@@ -9,7 +9,7 @@ export const handler = async (eventClient: Client) => {
 
     user?.setActivity({
       type: ActivityType.Playing,
-      name: `v${metadata.version}`,
+      name: `v${botMetadata.version}`,
     });
 
     signale.success(

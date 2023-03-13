@@ -7,8 +7,8 @@ const pkg = require('../package.json');
   try {
     signale.await('Exporting bot metadata...');
 
-    const metadataFile = join(__dirname, '..', 'src', 'metadata.json');
-    await writeFile(metadataFile, JSON.stringify({
+    const botMetadataFile = join(__dirname, '..', 'src', 'bot-metadata.json');
+    await writeFile(botMetadataFile, JSON.stringify({
       version: pkg.version,
     }));
 

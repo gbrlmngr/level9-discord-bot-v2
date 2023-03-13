@@ -24,7 +24,7 @@ async function logIn(token: string): Promise<Client | void> {
 }
 
 async function registerClientEvents(client: Client): Promise<void> {
-  client.on(clientReadyEvent.name, clientReadyEvent.handler);
+  client.once(clientReadyEvent.name, clientReadyEvent.handler);
   client.on(interactionCreateEvent.name, interactionCreateEvent.handler);
 }
 
