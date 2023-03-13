@@ -2,9 +2,7 @@ import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 
 export const metadata = new SlashCommandBuilder()
   .setName('ping')
-  .setDescription(
-    'Pong! This command is used to check if the bot is alive or not.'
-  );
+  .setDescription('Check if the bot is alive or not.');
 
 export const handler = async (interaction: ChatInputCommandInteraction) => {
   await interaction.reply({

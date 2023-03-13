@@ -1,12 +1,12 @@
 {
-  "name": "@level9gg/app-kit",
+  "name": "@level9gg/discord-bot",
   "version": "0.0.0",
   "private": true,
-  "description": "Level9.GG App Kit is the fastest way to create new Node.js applications, the Level9.GG way!",
+  "description": "Level9.GG Discord bot",
   "main": "dist/main.js",
   "scripts": {
     "clean": "rimraf dist/",
-    "build": "tsc",
+    "build": "npm run export-bot-metadata && tsc",
     "build:dev": "npm run build -- --watch",
     "start": "cross-env NODE_ENV=production dotenv -e .env.production -- node dist/main.js",
     "start:dev": "cross-env NODE_ENV=development dotenv -e .env.development -- nodemon ./dist/main.js",
@@ -15,11 +15,12 @@
     "test": "vitest src/",
     "prepare": "husky install",
     "register-slash-commands": "dotenv -e .env.production -- node scripts/register-slash-commands.cjs",
-    "register-slash-commands:dev": "dotenv -e .env.development -- node scripts/register-slash-commands.cjs"
+    "register-slash-commands:dev": "dotenv -e .env.development -- node scripts/register-slash-commands.cjs",
+    "export-bot-metadata": "node scripts/export-bot-metadata.cjs"
   },
   "keywords": [
     "level9gg",
-    "starter kit"
+    "discord bot"
   ],
   "author": "Gabriel Mangiurea",
   "license": "Unlicensed",

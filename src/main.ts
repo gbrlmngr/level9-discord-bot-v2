@@ -1,6 +1,13 @@
-import { Client, Events, GatewayIntentBits, Interaction } from 'discord.js';
+import {
+  ActivityType,
+  Client,
+  Events,
+  GatewayIntentBits,
+  Interaction,
+} from 'discord.js';
 import * as signale from 'signale';
 import { DISCORD_CLIENT_TOKEN } from './configuration/discord';
+import * as metadata from './metadata.json';
 
 import * as pingCommand from './commands/ping.command';
 
@@ -24,11 +31,23 @@ async function logIn(token: string): Promise<Client | void> {
 
 async function registerClientEvents(client: Client): Promise<void> {
   client.on(Events.ClientReady, async (eventClient: Client) => {
-    const { user } = eventClient;
+    try {
+      const { user } = eventClient;
 
-    signale.success(
-      `Discord bot is locked and loaded! Logged in as: ${user?.username}#${user?.discriminator} (${user?.id})`
-    );
+      user?.setActivity({
+        type: ActivityType.Playing,
+        name: `v${metadata.version}`,
+      });
+
+      signale.success(
+        `Discord bot is locked and loaded! Logged in as: ${user?.username}#${user?.discriminator} (${user?.id})`
+      );
+    } catch (error: unknown) {
+      signale.error(
+        'Got a stinky situation on the ready event:',
+        (error as Error).message
+      );
+    }
   });
 
   client.on(Events.InteractionCreate, async (interaction: Interaction) => {
@@ -39,8 +58,10 @@ async function registerClientEvents(client: Client): Promise<void> {
     if (!command) return;
 
     try {
+      const { user, commandName } = interaction;
+
       signale.debug(
-        `User "${interaction.user.id}" ran command: ${interaction.commandName}`
+        `User ${user.username}#${user.discriminator} (${user.id}) ran command: ${commandName}`
       );
       await command(interaction);
     } catch (error: unknown) {
