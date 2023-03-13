@@ -24,8 +24,10 @@ async function logIn(token: string): Promise<Client | void> {
 
 async function registerClientEvents(client: Client): Promise<void> {
   client.on(Events.ClientReady, async (eventClient: Client) => {
+    const { user } = eventClient;
+
     signale.success(
-      `Discord bot is locked and loaded! Logged in as: ${eventClient.user?.username}`
+      `Discord bot is locked and loaded! Logged in as: ${user?.username}#${user?.discriminator} (${user?.id})`
     );
   });
 
@@ -58,7 +60,7 @@ async function main() {
     await registerClientCommands(client!);
   } catch (error: unknown) {
     signale.fatal(
-      'Stopped to a halt due to an exception:',
+      'Stopped to a halt due to the following exception:',
       (error as Error).message
     );
   }

@@ -14,8 +14,8 @@
     "format": "prettier --write src/",
     "test": "vitest src/",
     "prepare": "husky install",
-    "register-discord-commands": "dotenv -e .env.production -- node scripts/register-discord-commands.cjs",
-    "register-discord-commands:dev": "dotenv -e .env.development -- node scripts/register-discord-commands.cjs"
+    "register-slash-commands": "dotenv -e .env.production -- node scripts/register-slash-commands.cjs",
+    "register-slash-commands:dev": "dotenv -e .env.development -- node scripts/register-slash-commands.cjs"
   },
   "keywords": [
     "level9gg",
