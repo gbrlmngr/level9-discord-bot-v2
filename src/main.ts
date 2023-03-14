@@ -5,10 +5,11 @@ import { DISCORD_CLIENT_TOKEN } from './configuration/discord';
 import * as clientReadyEvent from './events/client-ready.event';
 import * as chatInputCommandEvent from './events/chat-input-command.event';
 
+import { CommandHandler } from './utilities/commands';
 import * as pingCommand from './commands/ping.command';
 
 /* eslint-disable-next-line */
-export const clientCommands = new Collection<string, Function>();
+export const clientCommands = new Collection<string, CommandHandler<any>>();
 
 async function logIn(token: string): Promise<Client | void> {
   try {

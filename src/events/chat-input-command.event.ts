@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { Events, Interaction } from 'discord.js';
 import * as signale from 'signale';
 import { clientCommands } from '../main';
@@ -17,15 +18,17 @@ export const handler = async (interaction: Interaction) => {
 
   if (!command) return;
 
+  const commandExecutionId = randomUUID();
+
   try {
     const { user, commandName } = interaction;
-
     await limiter.consume();
-    await command(interaction);
 
     signale.debug(
-      `User ${user.username}#${user.discriminator} (${user.id}) ran command: ${commandName}`
+      `User ${user.username}#${user.discriminator} (${user.id}) ran command: ${commandName} (${commandExecutionId})`
     );
+
+    await command({ commandExecutionId })(interaction);
   } catch (error: unknown) {
     if (error instanceof RateLimitedException) {
       await interaction.reply({
@@ -33,7 +36,15 @@ export const handler = async (interaction: Interaction) => {
         ephemeral: true,
       });
     } else {
-      signale.error('Tripped by a bad interaction:', (error as Error).message);
+      signale.error(
+        `Tripped by a bad interaction (${commandExecutionId}):`,
+        (error as Error).message
+      );
+
+      await interaction.reply({
+        content: `Something went wrong and I couldn't fulfill your request. Try again later!`,
+        ephemeral: true,
+      });
     }
   }
 };
