@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits } from 'discord.js';
+import { Client, Collection, GatewayIntentBits } from 'discord.js';
 import * as signale from 'signale';
 import { DISCORD_CLIENT_TOKEN } from './configuration/discord';
 
@@ -7,7 +7,8 @@ import * as chatInputCommandEvent from './events/chat-input-command.event';
 
 import * as pingCommand from './commands/ping.command';
 
-export const clientCommands = new Map();
+/* eslint-disable-next-line */
+export const clientCommands = new Collection<string, Function>();
 
 async function logIn(token: string): Promise<Client | void> {
   try {
@@ -36,6 +37,8 @@ async function main() {
   try {
     const client = await logIn(DISCORD_CLIENT_TOKEN);
     await registerClientCommands();
+
+    /* eslint-ignore-next-line */
     await registerClientEvents(client!);
   } catch (error: unknown) {
     signale.fatal(
