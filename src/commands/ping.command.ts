@@ -7,7 +7,7 @@ import {
   RateLimitType,
 } from '../utilities/rate-limiter';
 
-const limiter = new RateLimiter(RateLimitType.User, 1);
+const limiter = new RateLimiter(RateLimitType.Local, 1);
 
 export const metadata = new SlashCommandBuilder()
   .setName('ping')

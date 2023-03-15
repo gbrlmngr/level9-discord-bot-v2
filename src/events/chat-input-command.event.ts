@@ -8,7 +8,7 @@ import {
   RateLimitType,
 } from '../utilities/rate-limiter';
 
-const limiter = new RateLimiter(RateLimitType.Server, 5000);
+const limiter = new RateLimiter(RateLimitType.Global, 2000);
 
 export const name = Events.InteractionCreate;
 export const handler = async (interaction: Interaction) => {

@@ -47,6 +47,7 @@
     "env-var": "^7.3.0",
     "esbuild": "0.17.11",
     "limiter": "^2.1.0",
+    "lru-cache": "^8.0.0",
     "signale": "^1.4.0"
   },
   "engines": {
