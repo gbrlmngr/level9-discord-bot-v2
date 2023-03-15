@@ -9,8 +9,8 @@ export enum RateLimitType {
 const DEFAULT_GLOBAL_TOKENS_PER_TIME_UNIT = 1000;
 const MAX_CACHE_SIZE = 512;
 
-export class RateLimiter<RLType extends RateLimitType> {
-  public type: RLType;
+export class RateLimiter<R extends RateLimitType> {
+  public type: R;
   public tokens: number;
   public interval: Interval;
   public globalInstance: Limiter;
@@ -25,10 +25,10 @@ export class RateLimiter<RLType extends RateLimitType> {
       fireImmediately: true,
     });
 
-  public constructor(type: RLType, tokens: number) {
+  public constructor(type: R, tokens: number, interval: Interval = 'second') {
     this.type = type;
     this.tokens = tokens;
-    this.interval = 'second';
+    this.interval = interval;
 
     this.globalInstance = this.defaultLimiterInstance(
       type === RateLimitType.Global
@@ -40,9 +40,7 @@ export class RateLimiter<RLType extends RateLimitType> {
 
   public addConsumer(key: string): void {
     if (this.type === RateLimitType.Global) {
-      throw new Error(
-        'Rate limiter: cannot add a consumer on a Global-type rate limiter'
-      );
+      throw new NoConsumersOnGlobalLimiterException();
     }
 
     if (this.localInstances.has(key)) return;
@@ -69,6 +67,8 @@ export class RateLimiter<RLType extends RateLimitType> {
       } catch {
         throw new RateLimitedException(this.type);
       }
+    } else {
+      throw new LocalInstanceKeyNotFoundException();
     }
   }
 }
@@ -80,5 +80,20 @@ export class RateLimitedException extends Error {
         ? `:face_with_peeking_eye: There's currently too much pressure on the bot, so we'll have to skip your request. Try again later!`
         : ':face_with_peeking_eye: You might want to slow down a bit with these commands. Try again later!'
     );
+    this.name = 'RateLimitedException';
+  }
+}
+
+export class NoConsumersOnGlobalLimiterException extends Error {
+  public constructor() {
+    super('Unable to add consumers to a Global-type limiter');
+    this.name = 'NoConsumersOnGlobalLimiterException';
+  }
+}
+
+export class LocalInstanceKeyNotFoundException extends Error {
+  public constructor() {
+    super('Unable to retrieve the limiter instance');
+    this.name = 'LocalInstanceKeyNotFoundException';
   }
 }

@@ -8,7 +8,7 @@ import {
   RateLimitType,
 } from '../utilities/rate-limiter';
 
-const limiter = new RateLimiter(RateLimitType.Global, 2000);
+const limiter = new RateLimiter(RateLimitType.Global, 2000, 'second');
 
 export const name = Events.InteractionCreate;
 export const handler = async (interaction: Interaction) => {
@@ -25,7 +25,7 @@ export const handler = async (interaction: Interaction) => {
     await limiter.consume();
 
     signale.debug(
-      `User ${user.username}#${user.discriminator} (${user.id}) ran command: ${commandName} (${commandExecutionId})`
+      `[${commandExecutionId}] User ${user.username}#${user.discriminator} (${user.id}) ran command: ${commandName}`
     );
 
     await command({ commandExecutionId })(interaction);
@@ -37,12 +37,13 @@ export const handler = async (interaction: Interaction) => {
       });
     } else {
       signale.error(
-        `Tripped by a bad interaction (${commandExecutionId}):`,
-        (error as Error).message
+        `[${commandExecutionId}] ${(error as Error).name}: ${
+          (error as Error).message
+        }`
       );
 
       await interaction.reply({
-        content: `Something went wrong and I couldn't fulfill your request. Try again later!`,
+        content: `:flushed: We hit a brick wall and could not fulfill your request. You can either try again a bit later or ask someone from the moderation team to help you out. **Request ID: ${commandExecutionId}**.`,
         ephemeral: true,
       });
     }
