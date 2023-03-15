@@ -7,6 +7,7 @@ import * as chatInputCommandEvent from './events/chat-input-command.event';
 
 import { CommandHandler } from './utilities/commands';
 import * as pingCommand from './commands/ping.command';
+import * as lfgCommand from './commands/lfg.command';
 
 /* eslint-disable-next-line */
 export const clientCommands = new Collection<string, CommandHandler<any>>();
@@ -32,6 +33,7 @@ async function registerClientEvents(client: Client): Promise<void> {
 
 async function registerClientCommands(): Promise<void> {
   clientCommands.set(pingCommand.metadata.name, pingCommand.handler);
+  clientCommands.set(lfgCommand.metadata.name, lfgCommand.handler);
 }
 
 async function main() {
@@ -50,3 +52,10 @@ async function main() {
 }
 
 main();
+
+process.on('uncaughtException', (error) => {
+  signale.fatal(
+    'Stopped to a halt due to the following exception:',
+    (error as Error).message
+  );
+});

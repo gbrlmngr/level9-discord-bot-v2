@@ -8,8 +8,8 @@ export const handler = async (eventClient: Client) => {
     const { user } = eventClient;
 
     user?.setActivity({
-      type: ActivityType.Playing,
-      name: `v${botMetadata.version}`,
+      type: ActivityType.Watching,
+      name: `Level9.GG (bot version: ${botMetadata.version})`,
     });
 
     signale.success(
