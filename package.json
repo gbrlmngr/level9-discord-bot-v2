@@ -1,6 +1,6 @@
 {
   "name": "@level9gg/discord-bot",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Level9.GG Discord bot",
   "main": "dist/main.js",
@@ -8,6 +8,7 @@
     "clean": "rimraf dist/",
     "build": "npm run export-bot-metadata && tsc",
     "build:dev": "npm run build -- --watch",
+    "build:digitalocean": "npm run build && npm ci",
     "start": "cross-env NODE_ENV=production dotenv -e .env.production -- node dist/main.js",
     "start:dev": "cross-env NODE_ENV=development dotenv -e .env.development -- nodemon ./dist/main.js",
     "lint": "eslint --fix src/",
@@ -53,7 +54,8 @@
     "signale": "^1.4.0"
   },
   "engines": {
-    "node": ">=18.15"
+    "node": ">=16",
+    "npm": ">=8"
   },
   "signale": {
     "displayTimestamp": true
