@@ -14,6 +14,7 @@ import {
 } from '../configuration/discord';
 import { CommandMetadata } from '../utilities/commands';
 import { RateLimiter, RateLimitType } from '../utilities/rate-limiter';
+import { getRandomGameHintFor, formatHint } from '../utilities/lfg';
 
 const limiter = new RateLimiter(RateLimitType.Local, 8, 'hour');
 
@@ -58,6 +59,8 @@ export const handler =
         )
       ) {
         const game = interaction.options.getString('game');
+        const hint = getRandomGameHintFor(game ?? '');
+
         await (interaction.member?.roles as GuildMemberRoleManager).add(
           LFG_ROLE_ID
         );
@@ -68,7 +71,9 @@ export const handler =
             ${userMention(
               interaction.user.id
             )} is looking to join a group to play **${game}**!
-            _You can use the thread below to discuss._`
+            You can use the thread below to discuss.${
+              hint ? ` \n\n${formatHint(hint)}` : ''
+            }`
           ),
           allowedMentions: {
             repliedUser: false,
