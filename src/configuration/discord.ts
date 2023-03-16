@@ -11,3 +11,5 @@ export const LFG_ROLE_ID = get('LFG_ROLE_ID').required().asString();
 export const LFG_NOTIFICATION_ROLE_ID = get('LFG_NOTIFICATION_ROLE_ID')
   .required()
   .asString();
+
+export const LFG_CHANNEL_ID = get('LFG_CHANNEL_ID').required().asString();

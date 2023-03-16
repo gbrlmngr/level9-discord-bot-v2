@@ -6,9 +6,11 @@ import {
   inlineCode,
   roleMention,
   userMention,
+  channelMention,
 } from 'discord.js';
 import { stripIndents } from 'common-tags';
 import {
+  LFG_CHANNEL_ID,
   LFG_NOTIFICATION_ROLE_ID,
   LFG_ROLE_ID,
 } from '../configuration/discord';
@@ -48,8 +50,27 @@ export const handler =
 
     limiter.addConsumer(interaction.user.id);
     await limiter.consume(interaction.user.id);
-    await interaction.deferReply({ fetchReply: true });
 
+    const lfgChannel = interaction.guild?.channels.cache.get(LFG_CHANNEL_ID);
+
+    if (!lfgChannel?.id) {
+      throw new Error(
+        `"Looking for Group" channel ID could not be found. Please check the "LFG_CHANNEL_ID" variable.`
+      );
+    }
+
+    if (lfgChannel.id !== interaction.channel?.id) {
+      await interaction.reply({
+        content: `:no_entry: This command can only be used in the ${channelMention(
+          lfgChannel.id
+        )} channel!`,
+        ephemeral: true,
+      });
+
+      return;
+    }
+
+    await interaction.deferReply({ fetchReply: true });
     const selectedSubCommand = interaction.options.getSubcommand();
 
     if (selectedSubCommand === 'start') {
