@@ -1,6 +1,8 @@
 import { Client, Collection, GatewayIntentBits } from 'discord.js';
+import { default as express } from 'express';
 import * as signale from 'signale';
 import { DISCORD_CLIENT_TOKEN } from './configuration/discord';
+import { EXPRESS_PORT } from './configuration/express';
 
 import * as clientReadyEvent from './events/client-ready.event';
 import * as chatInputCommandEvent from './events/chat-input-command.event';
@@ -11,6 +13,7 @@ import * as lfgCommand from './commands/lfg.command';
 
 /* eslint-disable-next-line */
 export const clientCommands = new Collection<string, CommandHandler<any>>();
+const expressApp = express();
 
 async function logIn(token: string): Promise<Client | void> {
   try {
@@ -36,8 +39,20 @@ async function registerClientCommands(): Promise<void> {
   clientCommands.set(lfgCommand.metadata.name, lfgCommand.handler);
 }
 
+async function startExpressServer() {
+  expressApp.get('/healthcheck', (_request, response) => {
+    response.json({ ok: true });
+  });
+
+  expressApp.listen(EXPRESS_PORT, () => {
+    signale.success(`Express server started on port ${EXPRESS_PORT}`);
+  });
+}
+
 async function main() {
   try {
+    await startExpressServer();
+
     const client = await logIn(DISCORD_CLIENT_TOKEN);
     await registerClientCommands();
 
