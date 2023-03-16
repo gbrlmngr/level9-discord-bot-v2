@@ -56,8 +56,8 @@
     "signale": "^1.4.0"
   },
   "engines": {
-    "node": ">=16",
-    "npm": ">=8"
+    "node": "16.x",
+    "npm": "8.x"
   },
   "signale": {
     "displayTimestamp": true
