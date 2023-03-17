@@ -8,7 +8,7 @@
     "clean": "rimraf dist/",
     "build": "npm run export-bot-metadata && tsc",
     "build:dev": "npm run build -- --watch",
-    "build:digitalocean": "npm run build && npm ci && npm run register-slash-commands",
+    "build:digitalocean": "npm ci && npm run build && npm run register-slash-commands",
     "start": "cross-env NODE_ENV=production dotenv -e .env.production -- node dist/main.js",
     "start:dev": "cross-env NODE_ENV=development dotenv -e .env.development -- nodemon ./dist/main.js",
     "lint": "eslint --fix src/",
