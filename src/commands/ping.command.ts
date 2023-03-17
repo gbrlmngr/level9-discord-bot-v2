@@ -22,6 +22,8 @@ export const handler =
     initialReply.edit(
       `Pong! I am alive and my reaction time was at around **${
         initialReply.createdTimestamp - interaction.createdTimestamp
-      }ms**. You can also check <https://level9.gg/go/status> for a slightly detailed view over most of the Level9.GG services.`
+      }ms** (websocket ping was **${
+        interaction.client.ws.ping
+      }ms**). You can also check <https://level9.gg/go/status> for a slightly detailed view over most of the Level9.GG services.`
     );
   };
