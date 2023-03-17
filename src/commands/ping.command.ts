@@ -6,7 +6,7 @@ const limiter = new RateLimiter(RateLimitType.Local, 1, 'second');
 
 export const metadata = new SlashCommandBuilder()
   .setName('ping')
-  .setDescription('Check if the bot is alive or not.');
+  .setDescription('Check if the bot is alive or not');
 
 export const handler =
   (metadata: CommandMetadata) =>
@@ -15,13 +15,13 @@ export const handler =
     await limiter.consume(interaction.user.id);
 
     const initialReply = await interaction.reply({
-      content: 'Got the ping! Waiting for the pong...',
+      content: 'Received your ping! Analyzing...',
       fetchReply: true,
     });
 
     initialReply.edit(
-      `Pong! I am alive and reacted in around ${
+      `Pong! I am alive and my reaction time was at around **${
         initialReply.createdTimestamp - interaction.createdTimestamp
-      }ms`
+      }ms**. You can also check <https://level9.gg/go/status> for a slightly detailed view over most of the Level9.GG services.`
     );
   };

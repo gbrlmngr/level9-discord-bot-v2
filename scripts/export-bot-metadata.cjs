@@ -8,12 +8,18 @@ const pkg = require('../package.json');
     signale.await('Exporting bot metadata...');
 
     const botMetadataFile = join(__dirname, '..', 'src', 'bot-metadata.json');
-    await writeFile(botMetadataFile, JSON.stringify({
-      version: pkg.version,
-    }));
+    await writeFile(
+      botMetadataFile,
+      JSON.stringify({
+        version: pkg.version,
+      })
+    );
 
     signale.success('Bot metadata has been exported!');
   } catch (error) {
-    signale.error('Unable to export bot metadata due to the following exception:', error.message);
+    signale.error(
+      'Unable to export bot metadata due to the following exception:',
+      error.message
+    );
   }
 })();
