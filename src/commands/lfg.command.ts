@@ -15,10 +15,10 @@ import {
   LFG_ROLE_ID,
 } from '../configuration/discord';
 import { CommandMetadata } from '../utilities/commands';
-import { RateLimiter, RateLimitType } from '../utilities/rate-limiter';
+import { RateLimiter, TimeUnitsInSeconds } from '../utilities/rate-limiter';
 import { getRandomGameHintFor, formatHint } from '../utilities/lfg';
 
-const limiter = new RateLimiter(RateLimitType.Local, 8, 'hour');
+const limiter = new RateLimiter(8, TimeUnitsInSeconds.Hour);
 
 export const metadata = new SlashCommandBuilder()
   .setName('lfg')
@@ -48,7 +48,6 @@ export const handler =
   async (interaction: ChatInputCommandInteraction) => {
     if (!interaction.isChatInputCommand()) return;
 
-    limiter.addConsumer(interaction.user.id);
     await limiter.consume(interaction.user.id);
 
     const lfgChannel = interaction.guild?.channels.cache.get(LFG_CHANNEL_ID);

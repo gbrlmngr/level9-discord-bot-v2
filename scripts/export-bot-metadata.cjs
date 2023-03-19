@@ -18,7 +18,7 @@ const pkg = require('../package.json');
     signale.success('Bot metadata has been exported!');
   } catch (error) {
     signale.error(
-      'Unable to export bot metadata due to the following exception:',
+      'Unable to export bot metadata due to:',
       error.message
     );
   }

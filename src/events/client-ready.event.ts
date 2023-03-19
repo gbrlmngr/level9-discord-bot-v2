@@ -13,7 +13,7 @@ export const handler = async (eventClient: Client) => {
     });
 
     signale.success(
-      `Discord bot is locked and loaded! Logged in as: ${user?.username}#${user?.discriminator} (${user?.id})`
+      `Discord bot is locked and loaded! Logged in as: ${user?.tag} (${user?.id})`
     );
   } catch (error: unknown) {
     signale.error(
