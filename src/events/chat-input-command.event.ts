@@ -1,31 +1,37 @@
 import { randomUUID } from 'node:crypto';
 import { Events, Interaction } from 'discord.js';
 import * as signale from 'signale';
+
 import { clientCommands } from '../main';
 import {
   RateLimitedException,
   RateLimiter,
-  RateLimitType,
+  TimeUnitsInSeconds,
 } from '../utilities/rate-limiter';
 
-const limiter = new RateLimiter(RateLimitType.Global, 2000, 'second');
+const limiter = new RateLimiter(250, TimeUnitsInSeconds.Second);
 
 export const name = Events.InteractionCreate;
 export const handler = async (interaction: Interaction) => {
   if (!interaction.isChatInputCommand()) return;
+  const { user, commandName } = interaction;
 
   const command = clientCommands.get(interaction.commandName);
 
-  if (!command) return;
+  if (!command || typeof command !== 'function') {
+    signale.warn(
+      `User ${user.tag} tried to run "${commandName}", but the command does not exist!`
+    );
+    return;
+  }
 
   const commandExecutionId = randomUUID();
 
   try {
-    const { user, commandName } = interaction;
     await limiter.consume();
 
     signale.debug(
-      `[${commandExecutionId}] User ${user.username}#${user.discriminator} (${user.id}) ran command: ${commandName}`
+      `[${commandExecutionId}] User ${user.tag} (${user.id}) ran command: ${commandName}`
     );
 
     await command({ commandExecutionId })(interaction);

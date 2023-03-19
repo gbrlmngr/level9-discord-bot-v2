@@ -1,8 +1,8 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import { CommandMetadata } from '../utilities/commands';
-import { RateLimiter, RateLimitType } from '../utilities/rate-limiter';
+import { RateLimiter, TimeUnitsInSeconds } from '../utilities/rate-limiter';
 
-const limiter = new RateLimiter(RateLimitType.Local, 1, 'second');
+const limiter = new RateLimiter(1, TimeUnitsInSeconds.Second);
 
 export const metadata = new SlashCommandBuilder()
   .setName('ping')
@@ -11,7 +11,6 @@ export const metadata = new SlashCommandBuilder()
 export const handler =
   (metadata: CommandMetadata) =>
   async (interaction: ChatInputCommandInteraction) => {
-    limiter.addConsumer(interaction.user.id);
     await limiter.consume(interaction.user.id);
 
     const initialReply = await interaction.reply({

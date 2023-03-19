@@ -35,7 +35,7 @@ const discordRESTClient = new REST({ version: '10' }).setToken(
     );
   } catch (error) {
     signale.error(
-      'Unable to register the slash commands due to the following exception:',
+      'Unable to register the slash commands due to:',
       error.message
     );
   }
