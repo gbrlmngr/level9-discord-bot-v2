@@ -10,9 +10,9 @@ const pkg = require('../package.json');
     const botMetadataFile = join(__dirname, '..', 'src', 'bot-metadata.json');
     await writeFile(
       botMetadataFile,
-      JSON.stringify({
+      `${JSON.stringify({
         version: pkg.version,
-      })
+      })}\n`
     );
 
     signale.success('Bot metadata has been exported!');
