@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model References {
+  id         String          @id
+  slug       String          @unique
+  forward_to String
+  type       ReferenceType
+  hits       Int?            @default(0)
+  last_hit   DateTime?
+  created_at DateTime?       @default(now())
+  created_by String?
+
+  @@index([slug])
+  @@index([type])
+}
+
+enum ReferenceType {
+  go_link
+  referral_link
+  other
+}
