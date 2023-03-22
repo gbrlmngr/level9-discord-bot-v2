@@ -1,22 +1,24 @@
 {
   "name": "@level9gg/discord-bot",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "private": true,
   "description": "Level9.GG Discord bot",
   "main": "dist/main.js",
   "scripts": {
     "clean": "rimraf dist/",
-    "build": "npm run export-bot-metadata && tsc",
+    "build": "npm run ebm && tsc",
     "build:dev": "npm run build -- --watch",
-    "build:digitalocean": "npm ci && npm run build && npm run register-slash-commands",
-    "start": "cross-env NODE_ENV=production dotenv -e .env -- node dist/main.js",
-    "start:dev": "cross-env NODE_ENV=development dotenv -e .env -- nodemon ./dist/main.js",
+    "build:digitalocean": "npm ci && npm run build && npm run rsc",
+    "start": "cross-env NODE_ENV=production dotenv -e .env.production -- node dist/main.js",
+    "start:dev": "cross-env NODE_ENV=development dotenv -e .env.development -- node ./dist/main.js",
+    "start:dev:watch": "cross-env NODE_ENV=development dotenv -e .env.development -- nodemon ./dist/main.js",
     "lint": "eslint --fix src/",
     "format": "prettier --write .",
     "test": "vitest src/",
     "prepare": "husky install",
-    "register-slash-commands": "dotenv -e .env -- node scripts/register-slash-commands.cjs",
-    "export-bot-metadata": "node scripts/export-bot-metadata.cjs"
+    "rsc": "dotenv -e .env.production -- node scripts/register-slash-commands.cjs",
+    "rsc:dev": "dotenv -e .env.development -- node scripts/register-slash-commands.cjs",
+    "ebm": "node scripts/export-bot-metadata.cjs"
   },
   "keywords": [
     "level9gg",
@@ -47,6 +49,7 @@
   "dependencies": {
     "@prisma/client": "^4.11.0",
     "common-tags": "^1.8.2",
+    "date-fns": "^2.29.3",
     "discord.js": "^14.8.0",
     "dotenv-cli": "^7.1.0",
     "env-var": "^7.3.0",
@@ -56,7 +59,8 @@
     "helmet": "^6.0.1",
     "http-status": "^1.6.2",
     "rate-limiter-flexible": "^2.4.1",
-    "signale": "^1.4.0"
+    "signale": "^1.4.0",
+    "tweetnacl": "^1.0.3"
   },
   "engines": {
     "node": "16.x",

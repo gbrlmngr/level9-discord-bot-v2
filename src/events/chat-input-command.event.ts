@@ -36,10 +36,12 @@ export const handler = async (interaction: Interaction) => {
 
     await command({ commandExecutionId })(interaction);
   } catch (error: unknown) {
+    const replyMethod = interaction.deferred ? 'editReply' : 'reply';
+
     if (error instanceof RateLimitedException) {
-      await interaction.reply({
+      await interaction[replyMethod]({
         content: error.message,
-        ephemeral: true,
+        ...(interaction.deferred ? {} : { ephemeral: true }),
       });
     } else {
       signale.error(
@@ -48,9 +50,9 @@ export const handler = async (interaction: Interaction) => {
         }`
       );
 
-      await interaction.reply({
+      await interaction[replyMethod]({
         content: `:flushed: We hit a brick wall and could not fulfill your request. You can either try again a bit later or ask someone from the moderation team to help you out. **Request ID: ${commandExecutionId}**.`,
-        ephemeral: true,
+        ...(interaction.deferred ? {} : { ephemeral: true }),
       });
     }
   }

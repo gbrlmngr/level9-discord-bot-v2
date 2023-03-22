@@ -3,20 +3,22 @@ import EventEmitter from 'eventemitter3';
 import { default as express, Application } from 'express';
 import { RateLimiterMemory } from 'rate-limiter-flexible';
 import * as signale from 'signale';
+import helmet from 'helmet';
 
 import { EXPRESS_PORT } from '../configuration/express';
 import { middleware as rateLimiterMiddleware } from './middlewares/rate-limiter';
 import { router as healthcheckRouter } from './routes/healthcheck';
-import helmet from 'helmet';
+import { router as ambassadorsRouter } from './routes/ambassadors';
 
 const rateLimiter = new RateLimiterMemory({
   duration: 1,
-  points: 8,
+  points: 12,
 });
 
 function registerRoutes(appInstance: Application): void {
   appInstance.use('/', healthcheckRouter);
   appInstance.use('/healthcheck', healthcheckRouter);
+  appInstance.use('/ambassadors', ambassadorsRouter);
 }
 
 export function start(

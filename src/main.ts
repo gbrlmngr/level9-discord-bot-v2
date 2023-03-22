@@ -11,6 +11,7 @@ import * as chatInputCommandEvent from './events/chat-input-command.event';
 import { CommandHandler } from './utilities/commands';
 import * as pingCommand from './commands/ping.command';
 import * as lfgCommand from './commands/lfg.command';
+import * as ambassadorCommand from './commands/ambassador.command';
 
 const eventEmitterInstance = new EventEmitter();
 
@@ -35,6 +36,10 @@ async function registerClientEvents(client: Client): Promise<void> {
 async function registerClientCommands(): Promise<void> {
   clientCommands.set(pingCommand.metadata.name, pingCommand.handler);
   clientCommands.set(lfgCommand.metadata.name, lfgCommand.handler);
+  clientCommands.set(
+    ambassadorCommand.metadata.name,
+    ambassadorCommand.handler
+  );
 }
 
 async function main() {
