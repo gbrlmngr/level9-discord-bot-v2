@@ -299,7 +299,7 @@ export function buildHelpEmbed(): APIEmbed {
         🎯 special access on all of our own game servers (where applicable)
         🎯 access to the ${roleMention(
           AMBASSADOR_ROLE_ID
-        )} private Discord channel
+        )} private Discord channels
         🎯 ability to change your Discord nickname
         🎯 ability to create private voice channels with up to 10 members
 

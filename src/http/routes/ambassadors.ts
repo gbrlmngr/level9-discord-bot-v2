@@ -11,6 +11,7 @@ import { AMBASSADORS_EXPIRATION_CRON_TRIGGER_SECRET_KEY } from '../../configurat
 import { parseInviteURL } from '../../utilities/ambassador';
 
 export const router = Router();
+const TIMESTAMP_TOLERANCE_IN_MS = 1000 * 30;
 
 router.post('/cron', async (req, res) => {
   const discordClient = req.app.locals.discordClient as Client;
@@ -36,6 +37,16 @@ router.post('/cron', async (req, res) => {
   );
 
   if (!isRequestSignatureValid) {
+    res.status(BAD_REQUEST).send('NOTOK');
+    return;
+  }
+
+  if (
+    Number(req.get('x-level9-timestamp')) + TIMESTAMP_TOLERANCE_IN_MS <
+      Date.now() ||
+    Number(req.get('x-level9-timestamp')) >
+      Date.now() + TIMESTAMP_TOLERANCE_IN_MS
+  ) {
     res.status(BAD_REQUEST).send('NOTOK');
     return;
   }
