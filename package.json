@@ -1,6 +1,6 @@
 {
   "name": "@level9gg/discord-bot",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "private": true,
   "description": "Level9.GG Discord bot",
   "main": "dist/main.js",
@@ -9,8 +9,8 @@
     "build": "npm run ebm && tsc",
     "build:dev": "npm run build -- --watch",
     "build:digitalocean": "npm ci && npm run build && npm run rsc",
-    "start": "cross-env NODE_ENV=production dotenv -e .env.production -- node dist/main.js",
-    "start:dev": "cross-env NODE_ENV=development dotenv -e .env.development -- node ./dist/main.js",
+    "start": "cross-env NODE_ENV=production dotenv -e .env.production -- concurrently \"node ./dist/main.js\" \"npm run cron:ambassadors-expiration\"",
+    "start:dev": "cross-env NODE_ENV=development dotenv -e .env.development -- concurrently \"node ./dist/main.js\" \"npm run cron:ambassadors-expiration\"",
     "start:dev:watch": "cross-env NODE_ENV=development dotenv -e .env.development -- nodemon ./dist/main.js",
     "lint": "eslint --fix src/",
     "format": "prettier --write .",
@@ -18,7 +18,8 @@
     "prepare": "husky install",
     "rsc": "dotenv -e .env.production -- node scripts/register-slash-commands.cjs",
     "rsc:dev": "dotenv -e .env.development -- node scripts/register-slash-commands.cjs",
-    "ebm": "node scripts/export-bot-metadata.cjs"
+    "ebm": "node scripts/export-bot-metadata.cjs",
+    "cron:ambassadors-expiration": "node scripts/cron/ambassadors-expiration.cjs"
   },
   "keywords": [
     "level9gg",
@@ -31,9 +32,11 @@
     "@commitlint/config-conventional": "^17.4.4",
     "@types/common-tags": "^1.8.1",
     "@types/express": "^4.17.17",
+    "@types/node-cron": "^3.0.7",
     "@types/signale": "^1.4.4",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
+    "concurrently": "^7.6.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.7.0",
@@ -48,6 +51,7 @@
   },
   "dependencies": {
     "@prisma/client": "^4.11.0",
+    "axios": "^1.3.4",
     "common-tags": "^1.8.2",
     "date-fns": "^2.29.3",
     "discord.js": "^14.8.0",
@@ -58,6 +62,7 @@
     "express": "^4.18.2",
     "helmet": "^6.0.1",
     "http-status": "^1.6.2",
+    "node-cron": "^3.0.2",
     "rate-limiter-flexible": "^2.4.1",
     "signale": "^1.4.0",
     "tweetnacl": "^1.0.3"
