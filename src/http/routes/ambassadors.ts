@@ -108,10 +108,7 @@ router.post('/cron', async (req, res) => {
       }
 
       await prismaClient.references.deleteMany({
-        where: {
-          last_hit: { lt: sub(startOfDay(new Date()), { days: 30 }) },
-          type: 'referral_link',
-        },
+        where: { id: { in: inactiveReferrals.map(({ id }) => id) } },
       });
 
       signale.complete(
