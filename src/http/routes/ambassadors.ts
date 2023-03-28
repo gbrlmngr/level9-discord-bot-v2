@@ -58,10 +58,24 @@ router.post('/cron', async (req, res) => {
       (
         await prismaClient.references.findMany({
           where: {
-            last_hit: { lt: sub(startOfDay(new Date()), { days: 30 }) },
+            OR: [
+              { last_hit: { lt: sub(new Date(), { days: 30 }) } },
+              {
+                created_at: { lt: sub(new Date(), { days: 30 }) },
+                hits: 0,
+              },
+            ],
             type: 'referral_link',
           },
-          select: { id: true, forward_to: true, created_by: true },
+          select: {
+            id: true,
+            forward_to: true,
+            created_by: true,
+            hits: true,
+            last_hit: true,
+            created_at: true,
+          },
+          take: 20,
         })
       )?.filter(({ created_by }) => Boolean(created_by)) ?? [];
 
@@ -73,7 +87,13 @@ router.post('/cron', async (req, res) => {
       });
 
       for (const referral of inactiveReferrals) {
-        signale.debug(`Processing inactive referral with ID: ${referral.id}`);
+        signale.debug(
+          `Processing inactive referral with ID: ${referral.id} (hits: ${
+            referral.hits ?? 0
+          }, last hit: ${
+            referral.last_hit?.toISOString() ?? 'never'
+          }, created at: ${referral.created_at?.toISOString() ?? 'never'})`
+        );
 
         const member = referralOwners?.get(referral.created_by!);
         await member?.roles.remove(AMBASSADOR_ROLE_ID);
