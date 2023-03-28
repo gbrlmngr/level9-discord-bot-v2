@@ -128,7 +128,7 @@ export function buildPositiveAmbassadorStatusEmbed(
       },
       {
         name: 'Registered on',
-        value: format(registrationDate, 'yyyy/MM/dd HH:mm'),
+        value: `${format(registrationDate, 'yyyy/MM/dd HH:mm')} (UTC)`,
         inline: true,
       },
       {
@@ -144,7 +144,7 @@ export function buildPositiveAmbassadorStatusEmbed(
       {
         name: 'Last hit on',
         value: lastHit
-          ? format(lastHit, 'yyyy/MM/dd HH:mm')
+          ? `${format(lastHit, 'yyyy/MM/dd HH:mm')} (UTC)`
           : `${italic('Never')}`,
         inline: true,
       },
@@ -314,7 +314,9 @@ export function buildHelpEmbed(): APIEmbed {
           '/ambassador apply'
         )}.
 
-        ⚠️ **The Ambassador benefits expire if more than 30 days have passed since you last invited others using your referral link!**
+        ⚠️ **The Ambassador benefits will expire if...**
+        - more than 15 days have passed since the creation of the referral link during which no activity has been recorded (0 hits)
+        - more than 30 days have passed since the last referral link activity
         This is to ensure that the Ambassador benefits are awarded fairly and sustainably.
       `
     )

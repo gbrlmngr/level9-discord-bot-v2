@@ -3,22 +3,27 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model References {
-  id         String          @id
-  slug       String          @unique
-  forward_to String
-  type       ReferenceType
-  hits       Int?            @default(0)
-  last_hit   DateTime?
-  created_at DateTime?       @default(now())
-  created_by String?
+  id           String        @id
+  slug         String        @unique
+  forward_to   String
+  type         ReferenceType
+  hits         Int?          @default(0)
+  last_hit     DateTime?
+  created_at   DateTime?     @default(now())
+  created_by   String?
+  is_permanent Boolean       @default(false)
 
   @@index([slug])
   @@index([type])
+  @@index([created_at])
+  @@index([is_permanent])
+  @@index([last_hit])
 }
 
 enum ReferenceType {

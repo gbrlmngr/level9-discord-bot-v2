@@ -61,11 +61,12 @@ router.post('/cron', async (req, res) => {
             OR: [
               { last_hit: { lt: sub(new Date(), { days: 30 }) } },
               {
-                created_at: { lt: sub(new Date(), { days: 30 }) },
+                created_at: { lt: sub(new Date(), { days: 15 }) },
                 hits: 0,
               },
             ],
             type: 'referral_link',
+            is_permanent: false,
           },
           select: {
             id: true,
